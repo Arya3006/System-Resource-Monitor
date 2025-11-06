@@ -51,9 +51,22 @@ function App() {
             onClick={() => setActiveView('RAM')}
             title="RAM"
             view="RAM"
-            subTitle={(staticData?.totalMemoryGB.toString() ?? '') + ' GB'}
-            data={ramUsages}
-          />
+            subTitle={
+              // compute human readable "used / total (percent)"
+              (() => {
+              const total = staticData?.totalMemoryGB ?? 0; // e.g. 11.78
+              const latestFraction = ramUsages.length > 0 ? ramUsages[ramUsages.length - 1] : undefined;
+              if (typeof latestFraction === 'number' && total > 0) {
+              const usedGB = +(total * latestFraction).toFixed(2);
+              const percent = +(latestFraction * 100).toFixed(1);
+              return `${usedGB} GB / ${total.toFixed(2)} GB  (${percent}%)`;
+            }
+            // fallback while loading
+            return (total > 0 ? `${total.toFixed(2)} GB` : '');
+            })()
+           }
+           data={ramUsages}
+         />
           <SelectOption
             onClick={() => setActiveView('STORAGE')}
             title="STORAGE"

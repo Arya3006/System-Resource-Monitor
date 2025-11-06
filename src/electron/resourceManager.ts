@@ -11,6 +11,9 @@ export function pollResources(mainWindow: BrowserWindow) {
     const cpuUsage = await getCpuUsage();
     const ramUsage = getRamUsage();
     const storageData = getStorageData();
+
+    console.log('[pollResources] cpuUsage, ramUsage, storageUsage:', cpuUsage, ramUsage, storageData.usage, 'totalMemMB:', osUtils.totalmem());
+
     ipcWebContentsSend('statistics', mainWindow.webContents, {
       cpuUsage,
       ramUsage,
